@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.andrew.eee508androidopencvtutorial">
 
+    <!--permissions-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!--features-->
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera.front"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
