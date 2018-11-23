@@ -7,6 +7,7 @@ import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
+import android.media.Image;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -158,8 +159,13 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
                     }
 
+                    if(Build.BRAND.equalsIgnoreCase("android")){
+                        params.setPreviewFormat(ImageFormat.YV12);
+                    }
+
                     mCamera.setParameters(params);
                     params = mCamera.getParameters();
+                    mPreviewFormat = params.getPreviewFormat();
 
                     mFrameWidth = params.getPreviewSize().width;
                     mFrameHeight = params.getPreviewSize().height;
@@ -303,7 +309,11 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
         @Override
         public Mat rgba() {
-            Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21, 4);
+            if(mPreviewFormat == ImageFormat.NV21)
+                Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21, 4);
+            else if(mPreviewFormat == ImageFormat.YV12){
+                Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2BGR_I420, 4);
+            }
             return mRgba;
         }
 
